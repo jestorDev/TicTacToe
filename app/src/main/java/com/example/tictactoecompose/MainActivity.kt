@@ -53,12 +53,27 @@ fun charImg(c :Char):Int{
     }
 }
 
+fun charNext(c :Char):Char{
+    return when(c){
+        'X'->'O'
+        'O'->'B'
+        'B'->'X'
+        else ->'B'
+    }
+}
+
+fun strNew(prev: String , i : Int , j : Int):String{
+    val idx = i*3 + j
+    return prev.substring(0, idx) + charNext(prev[idx]) + prev.substring(idx + 1)
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun Table() {
 
     var tb = rememberSaveable{ mutableStateOf("BBBBBBBXO") }
-
+    //var winner = rememberSaveable{ mutableStateOf("B") }
     Column(
         Modifier.background(Color.DarkGray).fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,7 +86,8 @@ fun Table() {
                 for (j in 0 until 3){
                     Image(
                         painter = painterResource(id = charImg(tb.value[i*3+j])) ,
-                        contentDescription = "sq", modifier = Modifier.size(110.dp).clickable { tb.value = "X".repeat(i*3+j) + "O".repeat(9-i*3-j) }
+                        contentDescription = "sq", modifier = Modifier.size(110.dp).clickable {
+                            tb.value = strNew(tb.value , i , j) }
                     )
                 }
             }
