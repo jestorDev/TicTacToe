@@ -27,28 +27,21 @@ import com.example.tictactoecompose.ui.theme.TicTacToeComposeTheme
 
 class MainActivity : ComponentActivity() {
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TicTacToeComposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    TableState()
+                    Table()
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TableState(){
-    var tbl = rememberSaveable{ mutableStateOf("BBBBBBBXO") }
-
-    Table(
-        tb = tbl ,
-        change = {idx-> tbl.value = "B".repeat(idx) +"X".repeat(8-idx) })
-}
 
 
 
@@ -60,9 +53,11 @@ fun charImg(c :Char):Int{
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun Table(tb: MutableState<String> , change : (idx :Int ) -> Unit) {
+fun Table() {
 
+    var tb = rememberSaveable{ mutableStateOf("BBBBBBBXO") }
 
     Column(
         Modifier.background(Color.DarkGray).fillMaxWidth(),
@@ -76,7 +71,7 @@ fun Table(tb: MutableState<String> , change : (idx :Int ) -> Unit) {
                 for (j in 0 until 3){
                     Image(
                         painter = painterResource(id = charImg(tb.value[i*3+j])) ,
-                        contentDescription = "sq", modifier = Modifier.size(110.dp).clickable { change(i*3+j) }
+                        contentDescription = "sq", modifier = Modifier.size(110.dp).clickable { tb.value = "X".repeat(i*3+j) + "O".repeat(9-i*3-j) }
                     )
                 }
             }
